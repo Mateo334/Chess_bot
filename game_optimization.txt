@@ -1,0 +1,1 @@
+Games: 100  Total time: 2.336 Avg time[ms]: 23.36

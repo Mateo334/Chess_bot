@@ -1,0 +1,11 @@
+main func -> call the tournament -> gather engines and play specified amount of games->
+write all games into file.
+Optionally use one of the engines or API to evaluate the elo of the given game. 
+Optionally make a tournament with a given amount of engines and compare their elos. 
+
+In file for the engine, there is:
+Evaluation function -> Has access to board and previous evaluations (hashed?)
+Moves ordering function -> Sorts the moves based on the best possible heuristic
+Square tables database -> Matrices to denote piece position values based on game state -> later make own
+
+
