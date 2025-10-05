@@ -5,7 +5,6 @@ import time as t
 import numpy as np
 
 
-#hello
 # def gather_engines():
 #     engine_list = []
 #     for file in os.listdir("Engines"):
@@ -18,11 +17,13 @@ def new_engine_play():
     return 0
 board = chess.Board()
 
-def clear_screen():
-    # Clear the terminal screen based on the operating system
-    os.system("cls") 
+# def clear_screen():
+#     # Clear the terminal screen based on the operating system
+#     os.system("cls") 
 # clear_screen()
 def play_game(number_of_games):
+    """Plays two engines against each other. Currently the first move in alphabetical order
+    and random."""
     moves_played = []
     tic = t.time()
     for i in range (0,number_of_games):
@@ -40,7 +41,7 @@ def play_game(number_of_games):
                 random_move = random.choice(legal_moves)
                 board.push(random_move)
                 moves_this_game.append(random_move)
-        if(moves_this_game):
+        if(moves_this_game): #Write all moves played into file
             with open("games_played.txt", 'a') as file:
                 file.write("Engine1" + " vs "+ "Engine2" + " | " + "Number of moves: " + str(len(moves_this_game)) + '\n')
                 file.write(" ".join([str(i) for i in moves_this_game if i])+ '\n')

@@ -1,0 +1,15 @@
+2r5/5p2/8/pp3kpp/1N2b1p1/1Pr1R1P1/1RPK1P1P/8 w - - 1 0
+Rxc3 Rxc3 Kxc3 axb4+ Kxb4
+1432
+
+2n3k1/6p1/R1N2pbp/3p4/3Pn1P1/5N1P/5P2/1r3BK1 w - - 1 0
+Ra8 Ned6 Ne7+
+1449
+
+8/1p4p1/p1pbk3/P2p3p/3Pr3/2B3PP/1P3P2/3R1K2 w - - 1 0
+f3 Re3 Kf2 
+1607
+
+5rk1/B5pp/3bb3/3ppp2/8/2P2P2/PrB2RPP/4R1K1 w - - 1 0
+Bxf5 Bxf5 Rxb2 
+1845
