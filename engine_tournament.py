@@ -1,20 +1,15 @@
 import chess
-import random
-import os
-import time as t
 import itertools
 from two_player import play_game
 from paranoid_king_v1 import paranoid_king as pkv1
 from Engines import engine_random 
-from san_converter import convert_whole_text
 
 
 engines = [pkv1,engine_random]
-board = chess.Board()
 
 def permute_players(num_matches):
     """Plays the whole tournament. Each engine against each other. Even against the same one."""
-    # Maybe modify it if there is a game, either to skip it, or add to the previous list. Can pass this as a parameter. 
+    # Modify it if there is a game, either to skip it, or add to the previous list. Can pass this as a parameter. 
     player_list = []
     matches_played = []
     with open("filename.txt", "r") as file:
@@ -39,4 +34,3 @@ def permute_players(num_matches):
         if(should_continue): continue
         play_game(match[0], match[1],num_matches)
 permute_players(1)
-print(t.time()-tic)

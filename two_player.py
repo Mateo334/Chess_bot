@@ -1,9 +1,6 @@
 import chess
 import random
-import os
 import time as t
-import itertools
-import tracemalloc
 from Engines import engine_random
 random_moves = engine_random.random_engine
 from paranoid_king_v1.paranoid_king import Negamax_ab_it as pkv1
@@ -69,5 +66,5 @@ def play_game(engine1, engine2, num_of_games, max_moves=2000,
     print("Rating of Engine: ", total_winrate+100/moves_average)
     print("Time average: " + f"{(t.time()-tic)/num_of_games:.2f}")
     
-play_game(random_moves, pkv1, 1, thinking_time=0.001)
+play_game(random_moves, pkv1, 1, thinking_time=0.00001)
 convert_whole_text()

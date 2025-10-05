@@ -22,3 +22,5 @@ def convert_whole_text():
             i += 1
     os.replace('output.txt','games_played.txt')
 # convert_whole_text()
+
+# def long_to_short_algebraic():
