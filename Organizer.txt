@@ -1,5 +1,0 @@
-engines = contains a list of engines that are used. For more complex, will designate a file for each one
-evaluation_minimax = does a complete evaluation of the board
-pyview = Utilizes the pygame interface and can convert between the two representations
-tournament = 
-paranoid_king_v1 = the first real engine. Specifications: 

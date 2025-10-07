@@ -7,7 +7,7 @@ from paranoid_king_v1.paranoid_king import Negamax_ab_it as pkv1
 
 
 board = chess.Board()
-from san_converter import convert_whole_text
+from Later_use.san_converter import convert_whole_text
 
 def play_game(engine1, engine2, num_of_games, max_moves=2000, 
               thinking_time = 0.02, game_time = None):
