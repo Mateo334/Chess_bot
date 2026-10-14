@@ -12,32 +12,30 @@ def board_hash(board):
 
 def Negamax_ab_it(board, color, time_limit):
     """Negamax with alpha beta pruning and Iterative Deepening."""
-    start_time = t.time()
-    pv_move = []
+    deadline = t.monotonic() + time_limit
+    if board.is_game_over():
+        return None
+    move = next(iter(board.legal_moves), None)
+    pv_move = None
     global t_table 
     for depth in range(1, 40): #Calling the recursive function through all values of depth
-        if(t.time() - start_time >= time_limit):
-            # print("Depth reached: ", depth)
-            # print(long_pv)
-            
-            if(depth>6):
-                with open("tt.txt", 'a') as file:
-                    file.write(str(t_table) + '\n')
-            return move
-        move, _  ,pv = nega_ab_it(board,color,depth, -sys.maxsize, sys.maxsize,depth, pv_move)
-        if(move): #Is not None
-            #Using only the next move in the sequence
-        #    pv_move = move 
-           pv_move = pv[0]
-        #    long_pv = pv
+        try:
+            pos_move, _, _pv = nega_ab_it(board, color, depth, -sys.maxsize, sys.maxsize, depth, pv_move, deadline=deadline)
+        except TimeoutError:
+            break
+        if pos_move is not None:
+            move = pos_move
+            pv_move = move
     return move
 # What do i need
 # A list of values assigned to the n+1 nodes - to pass as the PV
 # int depth to know how far we want to go next - iterate with +1
 
-def nega_ab_it(board, color, depth, alpha, beta, depth_called ,pv_move = None):
+def nega_ab_it(board, color, depth, alpha, beta, depth_called ,pv_move = None, deadline=None):
     """Negamax recursive function with alpha beta and iterative deepening"""
     global t_table
+    if deadline is not None and t.monotonic() >= deadline:
+        raise TimeoutError
     if(depth ==0 or board.is_game_over()):
         b_hash = board_hash(board)
         t_table[b_hash] = {"depth":depth_called, "score": evaluate(board)}
@@ -54,28 +52,31 @@ def nega_ab_it(board, color, depth, alpha, beta, depth_called ,pv_move = None):
         legal_moves.remove(pv_move)
         legal_moves.insert(0, pv_move)
     for move in legal_moves:
+        if deadline is not None and t.monotonic() >= deadline:
+            raise TimeoutError
         board.push(move)
-        # b_hash = board_hash(board)
-        board_key = board_hash(board)
-        b_hash = t_table.get(board_key)
-        if(not b_hash or b_hash["depth"] < depth_called):
-            _, score, child_pv = nega_ab_it(board, not color, depth-1, -beta, -alpha, depth_called)
-            t_table[board_key] = {"depth":depth, "score": -score}
-            score = -score
-        else:
-            if(not color):
-                score = b_hash["score"]
+        try:
+            # b_hash = board_hash(board)
+            board_key = board_hash(board)
+            b_hash = t_table.get(board_key)
+            if(not b_hash or b_hash["depth"] < depth_called):
+                _, score, child_pv = nega_ab_it(board, not color, depth-1, -beta, -alpha, depth_called, deadline=deadline)
+                t_table[board_key] = {"depth":depth, "score": -score}
+                score = -score
             else:
-                score = -b_hash["score"]
-            print("Board used! with depth: ", b_hash["depth"])
-            child_pv = []
-        board.pop()
-        if(score>maximum):
+                if(not color):
+                    score = b_hash["score"]
+                else:
+                    score = -b_hash["score"]
+                print("Board used! with depth: ", b_hash["depth"])
+                child_pv = []
+        finally:
+            board.pop()
+        if best_move is None or score > maximum:
             maximum = score 
             best_move = move
             pv = [move] + child_pv
-            if(score >alpha):
-                alpha = score
+            alpha = max(alpha, score)
         if(score >= beta):
             break
     return best_move, maximum, pv

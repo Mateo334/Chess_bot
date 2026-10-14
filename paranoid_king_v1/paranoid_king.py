@@ -7,25 +7,28 @@ import time as t
 
 def Negamax_ab_it(board, color, time_limit):
     """Negamax with alpha beta pruning and Iterative Deepening."""
-    start_time = t.time()
-    pv_move = []
+    deadline = t.monotonic() + time_limit
+    if(board.is_game_over()):
+        return None
+    move = next(iter(board.legal_moves), None)
+    pv_move = None
     for depth in range(1, 40): #Calling the recursive function through all values of depth
-        if(t.time() - start_time >= time_limit):
-            # print("Depth reached: ", depth)
-            # print(long_pv)
-            return move
-        move, _  ,pv = nega_ab_it(board,color,depth, -sys.maxsize, sys.maxsize, pv_move)
-        if(move): #Is not None
-            #Using only the next move in the sequence
+        try:
+            pos_move, _  ,_pv = nega_ab_it(board,color,depth, -sys.maxsize, sys.maxsize, pv_move, deadline= deadline)
+        except TimeoutError:
+            break
+        if pos_move is not None:
+           move = pos_move
            pv_move = move 
-        #    long_pv = pv
     return move
 # What do i need
 # A list of values assigned to the n+1 nodes - to pass as the PV
 # int depth to know how far we want to go next - iterate with +1
 
-def nega_ab_it(board, color, depth, alpha, beta,  pv_move = None):
+def nega_ab_it(board, color, depth, alpha, beta,  pv_move = None, deadline = None):
     """Negamax recursive function with alpha beta and iterative deepening"""
+    if(deadline is not None and t.monotonic() >= deadline):
+        raise TimeoutError
     if(depth ==0 or board.is_game_over()):
         if(not color):
             return None, -evaluate(board), []
@@ -40,15 +43,16 @@ def nega_ab_it(board, color, depth, alpha, beta,  pv_move = None):
         legal_moves.insert(0, pv_move)
     for move in legal_moves:
         board.push(move)
-        _, score, child_pv = nega_ab_it(board, not color, depth-1, -beta, -alpha)  
+        try:
+            _, score, child_pv = nega_ab_it(board, not color, depth-1, -beta, -alpha, deadline= deadline)  
+        finally:
+            board.pop()
         score = -score
-        board.pop()
-        if(score>maximum):
+        if( (best_move is None) or (score>maximum)): 
             maximum = score 
             best_move = move
             pv = [move] + child_pv
-            if(score >alpha):
-                alpha = score
+            alpha = max(alpha, score)
         if(score >= beta):
             break
     return best_move, maximum, pv

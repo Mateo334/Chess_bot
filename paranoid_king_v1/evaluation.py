@@ -1,9 +1,12 @@
 import chess
 from chess import Board
+
 board = chess.Board()
 board.set_fen("r2q1rk1/pp1b1ppp/2n2n2/2bp4/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 10")
 import sys
+
 from .square_tables import *
+
 
 def evaluate(board): #White has a positive evaluation score
     """Level progression is: Scalar(Fixed vals), Piece tables(Fixed vals), Mobility, King safety, Pawn structure, 
@@ -25,11 +28,8 @@ def evaluate(board): #White has a positive evaluation score
             return -sys.maxsize
         else:
             return sys.maxsize
-    elif(board.is_stalemate()):
-        if(eval_value>0):
-            return -1
-        elif(eval_value<0):
-            return 0#Modify later
+    elif board.is_game_over():
+        return 0
     #Piece square tables
     opening = [pawn_open,knight_open, bishop_open, rook_open, queen_open, king_open]
     for i, piece_type in enumerate(chess.PIECE_TYPES):

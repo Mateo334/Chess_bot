@@ -1,8 +1,11 @@
-from paranoid_king_v1.paranoid_king import Negamax_ab_it as pkv1
+from paranoid_king_v1.paranoid_king import Negamax_ab_it as cur_engine
 from chess import Board
-with open("test.txt", 'r') as file:
+from pathlib import Path
+with open(Path(__file__).with_name("test.txt"), 'r') as file:
     a = [x.strip() for x in file.readlines()]
 
+
+time_limit = 1.2
 for i,line in enumerate(a):
     if(i%3==0):
         board = Board(line)
@@ -12,14 +15,17 @@ for i,line in enumerate(a):
         elo = line
         ls_moves = moves.split()
         for j in range(len(ls_moves)):
-            move = pkv1(board, 1 if j%2 ==0  else 0, 0.1)
+            move = cur_engine(board, board.turn, time_limit)
+            if move is None or move not in board.legal_moves:
+                print("Test failed: engine returned an invalid move:", move)
+                break
             print(board.san(move), ls_moves[j])
             if(board.san(move) != ls_moves[j]):
                 # print("Test failed, elo: ", elo)
                 print("Test failed, elo: ", elo, "Progress: ", j/(len(ls_moves)))
                 break
             board.push(move)
-        if(j == len(ls_moves)-1):
+        else:
             print("Test passed! elo: ", elo)
     
     
