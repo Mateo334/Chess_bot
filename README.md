@@ -8,3 +8,4 @@ resulting in a lower Elo score.
 ### Time limits implemented
 ### Piece square tables
 And currently working on the table hashing (Zobrist)
+Will also calculate the Elo based on the engines playing against themselves and also for the puzzle solving Elo. Can also implement to lichess, but only for better engines, ie 2500+ elo
